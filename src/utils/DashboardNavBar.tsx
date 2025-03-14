@@ -9,7 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaAngleDown } from "react-icons/fa6";
-import { useNavigate, useLocation } from "react-router-dom"; 
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAppContext } from "@/utiles/AppContext";
 import { useLogout } from "@/hooks/userHooks";
 import AppSpiner from "@/utiles/AppSpiner";
@@ -53,7 +53,8 @@ function DashboardNavBar() {
     });
   }
 
-  const activeClass = "text-primary font-semibold border-b border-primary w-fit pb-1 lg:border-b-2";
+  const activeClass =
+    "text-primary font-semibold border-b border-primary w-fit pb-1 lg:bg-primary lg:text-primary-foreground  lg:rounded-full  lg:p-0 lg:py-1  lg:px-3 flex  items-center";
 
   return (
     <div className="w-full relative">
@@ -139,7 +140,7 @@ function DashboardNavBar() {
             </div>
             <div
               onClick={() => navigate("/pricing")}
-              className={`text-[15px] cursor-pointer border-2 border-constructive px-2 py-1 rounded-full ${
+              className={`text-[15px] cursor-pointer border border-primary px-2 py-1 rounded-full ${
                 isActive("/pricing") ? activeClass : ""
               }`}
             >

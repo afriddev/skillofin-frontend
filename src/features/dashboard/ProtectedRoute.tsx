@@ -1,5 +1,6 @@
 import { useGetMe } from "@/hooks/userHooks";
 import { useAppContext } from "@/utiles/AppContext";
+import AppSpiner from "@/utiles/AppSpiner";
 import DashboardNavBar from "@/utils/DashboardNavBar";
 import HomeFooter from "@/utils/HomeFooter";
 import MobileBottomNavBar from "@/utils/MobileBottomNavBar";
@@ -12,6 +13,7 @@ function ProtectedLayout() {
   const { dispatch } = useAppContext();
   const { pathname } = useLocation();
   const { getMe } = useGetMe();
+  const { userData } = useAppContext();
 
   useEffect(() => {
     if (localStorage?.getItem("emailId")) getMe(undefined);
@@ -66,6 +68,7 @@ function ProtectedLayout() {
 
   return (
     <div className="flex flex-col w-full h-screen relative">
+      {!userData && <AppSpiner />}
       <DashboardNavBar />
 
       <div className="flex flex-col flex-grow overflow-y-auto">

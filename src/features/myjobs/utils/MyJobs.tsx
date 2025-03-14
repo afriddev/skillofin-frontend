@@ -69,7 +69,7 @@ function MyJobs() {
   return (
     <div className="p-6">
       {(isPending || isLoading || approvingBid) && (
-        <AppSpiner bgColor="bg-foreground/50" />
+        <AppSpiner  />
       )}
       {userData?.userAccountData?.postedProjects?.length === 0 && (
         <div>

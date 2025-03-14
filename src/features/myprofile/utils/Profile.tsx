@@ -14,6 +14,7 @@ import { Button } from "@/components/ui/button";
 import { IoAlertCircleOutline } from "react-icons/io5";
 import { MdVerified } from "react-icons/md";
 import { BsBank2 } from "react-icons/bs";
+import { useAppContext } from "@/utiles/AppContext";
 
 function Profile() {
   const [openDialog, setOpendilog] = useState<boolean>(false);
@@ -31,6 +32,7 @@ function Profile() {
   const [editIndex, setEditIndex] = useState<number | undefined>(undefined);
   const [stateEmailId, setStateEmailId] = useState<string>("null");
   const navigate = useNavigate();
+  const { userData: userMainData } = useAppContext();
 
   useEffect(() => {
     if (state?.emailId) {
@@ -52,20 +54,10 @@ function Profile() {
         },
       });
     } else {
-      handleGetMeCallBack();
+      setUserData(userMainData);
+      setUserRole(userMainData?.userData?.role);
     }
-  }, [stateEmailId]);
-
-  function handleGetMeCallBack() {
-    getMe(undefined, {
-      onSuccess(data) {
-        if (data?.message === "SUCCESS") {
-          setUserData(data?.data);
-          setUserRole(data?.data?.userData?.role);
-        }
-      },
-    });
-  }
+  }, [stateEmailId, userMainData]);
 
   function handleConfigureClick(method: "add" | "edit", comp: string) {
     setMethod(method);
@@ -113,12 +105,11 @@ function Profile() {
       setUploading(false);
     }
   }
-  if (!userData) return <AppSpiner />;
 
   return (
     <div className="border  w-[95vw] lg:w-[80vw] rounded-lg h-full">
-      {(isPending || uplaoding || gettingUserDetails) && (
-        <AppSpiner bgColor="bg-foreground/50" />
+      {(isPending || uplaoding || gettingUserDetails || !userData) && (
+        <AppSpiner />
       )}
       <div className="p-6 flex justify-between items-center lg:flex-row flex-col gap-4">
         <div className="flex gap-5">
@@ -712,7 +703,6 @@ function Profile() {
           comp={comp}
           onClose={handleOnClose}
           index={editIndex}
-          handleGetMeCallBack={handleGetMeCallBack}
         />
       )}
     </div>

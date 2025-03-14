@@ -54,7 +54,7 @@ function DashboardNavBar() {
   return (
     <div className="w-full relative  ">
       {open && <PostJobDialog onClose={onClose} />}
-      {isLoading && <AppSpiner bgColor="bg-foreground/40" />}
+      {isLoading && <AppSpiner />}
 
       <div className="hidden md:flex justify-between items-center px-4  py-2">
         <div className="flex items-center gap-8">
@@ -86,7 +86,7 @@ function DashboardNavBar() {
                         <div className="">
                           <div
                             onClick={() => {
-                              setPopOverOpen1(false)
+                              setPopOverOpen1(false);
                               navigate("/withdraw");
                             }}
                             className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"

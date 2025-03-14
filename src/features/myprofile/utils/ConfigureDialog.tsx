@@ -21,6 +21,7 @@ import { X } from "lucide-react";
 import { Elements } from "@stripe/react-stripe-js";
 import { loadStripe } from "@stripe/stripe-js";
 import AccountElement from "./AccoutnElements";
+import { useAppContext } from "@/utiles/AppContext";
 const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY as string);
 
 interface ConfigureDialoginterface {
@@ -30,7 +31,6 @@ interface ConfigureDialoginterface {
   userData: any;
   userRole: string;
   index?: number;
-  handleGetMeCallBack: () => void;
 }
 
 function ConfigureDialog({
@@ -40,7 +40,6 @@ function ConfigureDialog({
   onClose,
   userRole,
   index,
-  handleGetMeCallBack,
 }: ConfigureDialoginterface) {
   const {
     register,
@@ -53,8 +52,8 @@ function ConfigureDialog({
   } = useForm();
   const { errors } = formState;
   const [skills, setSkills] = useState<{ name: string }[]>([]);
-
   const { isPending, updateProfile } = useUpdateProfile();
+  const { dispatch } = useAppContext();
 
   useEffect(() => {
     if (userData) {
@@ -232,8 +231,11 @@ function ConfigureDialog({
       {
         onSuccess(data) {
           if (data?.message === "SUCCESS") {
-            handleGetMeCallBack();
-            onClose()
+            dispatch({
+              type: "setUserData",
+              payload: data?.data,
+            });
+            onClose();
           }
         },
       }

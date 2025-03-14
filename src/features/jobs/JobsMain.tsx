@@ -25,17 +25,21 @@ import {
 } from "@/components/ui/select";
 import { MdClear } from "react-icons/md";
 import { useGetJobs } from "@/hooks/jobHooks";
+import { useAppContext } from "@/utiles/AppContext";
 
 function FreelancerJobs() {
   const [selectedJob, setSelectedJob] = useState<jobPostType | null>(null);
-  const { getJobs, data: jobListings, isPending } = useGetJobs();
+  const { getJobs, isPending } = useGetJobs();
   const [jobs, setJobs] = useState<jobPostType[] | undefined>();
   const [searchedValue, setSearchedValue] = useState("");
   const { state } = useLocation();
   const [selectedJobType, setSelectedJobType] = useState<string | null>(null);
+  const { jobs: jobsData } = useAppContext();
 
   useEffect(() => {
-    if (!jobListings)
+    if (jobsData) {
+      setJobs(jobsData);
+    } else if (!jobsData)
       getJobs(undefined, {
         onSuccess(data) {
           if (data?.message === "SUCCESS") {
@@ -43,56 +47,56 @@ function FreelancerJobs() {
           }
         },
       });
-  }, []);
+  }, [jobsData]);
 
   useEffect(() => {
     if (state?.value) {
       setSearchedValue(state?.value);
       handleSearch();
     }
-  }, [jobListings]);
+  }, [jobsData]);
 
   function handleSearch() {
     if (!selectedJobType && !searchedValue) {
-      setJobs(jobListings?.jobs);
+      setJobs(jobsData);
       return;
     }
 
     const temp: any = [];
 
     if (searchedValue && !selectedJobType) {
-      for (let index = 0; index < jobListings?.jobs?.length; index++) {
+      for (let index = 0; index < jobsData?.length; index++) {
         if (
-          jobListings?.jobs[index]?.title
+          jobsData[index]?.title
             ?.toLowerCase()
             .trim()
             .includes(searchedValue?.trim().toLowerCase())
         ) {
-          temp.push(jobListings?.jobs[index]);
+          temp.push(jobsData[index]);
         }
       }
     }
     if (!searchedValue && selectedJobType) {
-      for (let index = 0; index < jobListings?.jobs?.length; index++) {
+      for (let index = 0; index < jobsData?.length; index++) {
         if (
-          jobListings?.jobs[index]?.projectType ===
+          jobsData[index]?.projectType ===
           (selectedJobType === "regularJob" ? "JOB" : "PROJECT")
         ) {
-          temp.push(jobListings?.jobs[index]);
+          temp.push(jobsData[index]);
         }
       }
     }
     if (searchedValue && selectedJobType) {
-      for (let index = 0; index < jobListings?.jobs?.length; index++) {
+      for (let index = 0; index < jobsData?.length; index++) {
         if (
-          jobListings?.jobs[index]?.title
+          jobsData[index]?.title
             ?.toLowerCase()
             .trim()
             .includes(searchedValue?.trim().toLowerCase()) &&
-          jobListings?.jobs[index]?.projectType ===
+          jobsData[index]?.projectType ===
             (selectedJobType === "regularJob" ? "JOB" : "PROJECT")
         ) {
-          temp.push(jobListings?.jobs[index]);
+          temp.push(jobsData[index]);
         }
       }
     }
@@ -108,17 +112,17 @@ function FreelancerJobs() {
           onClose={() => setSelectedJob(null)}
         />
       )}
-      {jobListings?.jobs &&
-        jobListings?.jobs?.filter((job: any) => job.status !== "IN_PROGRESS")
-          ?.length === 0 && (
+      {jobsData &&
+        jobsData?.filter((job: any) => job.status !== "IN_PROGRESS")?.length ===
+          0 && (
           <div className="flex flex-col gap-4 items-center justify-center min-h-[60vh] w-full">
             <div className="text-3xl">No jobs found</div>
             <BsEmojiSmile className="h-20 w-20 text-constructive/40" />
           </div>
         )}
-      {jobListings?.jobs &&
-        jobListings?.jobs?.filter((job: any) => job.status !== "IN_PROGRESS")
-          ?.length > 0 && (
+      {jobsData &&
+        jobsData?.filter((job: any) => job.status !== "IN_PROGRESS")?.length >
+          0 && (
           <div className="flex flex-col gap-6 items-center">
             <div className="items-center flex flex-col lg:flex-row gap-2 lg:gap-6 mt-5">
               <Input
@@ -131,7 +135,7 @@ function FreelancerJobs() {
                 }}
                 clearCallBack={() => {
                   setSearchedValue("");
-                  setJobs(jobListings?.jobs);
+                  setJobs(jobsData);
                 }}
               />
               <div className="-ml-2 -mt-4 w-[93vw] lg:w-[20vw]">
@@ -159,7 +163,7 @@ function FreelancerJobs() {
                   title="Clear search"
                   onClick={() => {
                     setSearchedValue("");
-                    setJobs(jobListings?.jobs);
+                    setJobs(jobsData);
                     setSelectedJobType(null);
                   }}
                   className="px-2 h-8 lg:-mt-4 flex  items-center"

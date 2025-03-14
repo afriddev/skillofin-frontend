@@ -15,11 +15,11 @@ export type contextType = {
   paymetEmailId: string;
   posts: any;
   jobs: any;
-  mobileBottomMenu:number
-  projectDetails:{
-    id:string,
-    milestoneId:string
-  }
+  mobileBottomMenu: number;
+  projectDetails: {
+    id: string;
+    milestoneId: string;
+  };
 };
 
 const initState: contextType = {
@@ -31,11 +31,11 @@ const initState: contextType = {
   paymetEmailId: "",
   jobs: undefined,
   posts: undefined,
-  mobileBottomMenu:0,
-  projectDetails:{
-    id:"",
-    milestoneId:""
-  }
+  mobileBottomMenu: 0,
+  projectDetails: {
+    id: "",
+    milestoneId: "",
+  },
 };
 
 const contextProvider = createContext(initState);
@@ -47,19 +47,24 @@ function reducer(state: contextType, action: dispatchDataType) {
         ...state,
         temp: action?.payload,
       };
-      
+
+    case "setUserData":
+      return {
+        ...state,
+        userData: action?.payload,
+      };
+
     case "setMobileBottomMenu":
       return {
         ...state,
         mobileBottomMenu: action?.payload,
       };
-      
+
     case "setProjectDetails":
       return {
         ...state,
-        projectDetails:action?.payload,
+        projectDetails: action?.payload,
       };
-      
 
     case "setPaymentEmailId":
       return {
@@ -72,7 +77,7 @@ function reducer(state: contextType, action: dispatchDataType) {
         loggedIn: action?.payload?.loggedIn,
         userRole: action?.payload?.data?.userData?.role ?? undefined,
         userData: action.payload?.data ?? undefined,
-        posts: action?.payload?.data?.allPosts  ,
+        posts: action?.payload?.data?.allPosts,
         jobs: action?.payload?.data?.jobs,
       };
 
@@ -111,7 +116,17 @@ function reducer(state: contextType, action: dispatchDataType) {
 }
 export default function AppContext({ children }: { children: ReactNode }) {
   const [
-    { temp, loggedIn, userData, userRole, posts, jobs, paymetEmailId,mobileBottomMenu,projectDetails },
+    {
+      temp,
+      loggedIn,
+      userData,
+      userRole,
+      posts,
+      jobs,
+      paymetEmailId,
+      mobileBottomMenu,
+      projectDetails,
+    },
     dispatch,
   ] = useReducer(reducer, initState);
 
@@ -127,7 +142,7 @@ export default function AppContext({ children }: { children: ReactNode }) {
         temp,
         posts,
         mobileBottomMenu,
-        projectDetails
+        projectDetails,
       }}
     >
       {children}

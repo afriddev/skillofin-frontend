@@ -40,7 +40,7 @@ function MyPosts() {
 
   return (
     <div className="w-full h-full flex flex-col items-center ">
-      {(isPending || isLoading) && <AppSpiner bgColor="bg-foreground/50" />}
+      {(isPending || isLoading) && <AppSpiner/>}
 
       <div className="flex w-full justify-between px-4 lg:px-10 mt-3">
         {userData?.userData?.posts?.length > 0 && (

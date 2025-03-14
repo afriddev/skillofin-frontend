@@ -16,7 +16,7 @@ function ResubmitKYC() {
 
   return (
     <div className="w-full h-full flex">
-      {isPending && <AppSpiner bgColor="bg-background/50" />}
+      {isPending && <AppSpiner />}
       <div className="w-full h-full flex items-center justify-center text-xl">
         <ImSpinner11 className="animate-spin" />
       </div>

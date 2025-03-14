@@ -15,7 +15,9 @@ function Blog() {
   const [refresh, setRefresh] = useState<any>(undefined);
   const [allBlogs, setAllBlogs] = useState<any>(undefined);
   const [editBlog, setEditBlog] = useState<any>();
-  const [expandedPosts, setExpandedPosts] = useState<{ [key: string]: boolean }>({});
+  const [expandedPosts, setExpandedPosts] = useState<{
+    [key: string]: boolean;
+  }>({});
 
   useEffect(() => {
     blog(undefined, {
@@ -40,42 +42,45 @@ function Blog() {
     );
   }
 
-  const toggleReadMore = (postId: string) => {
+  function toggleReadMore(postId: string) {
     setExpandedPosts((prev) => ({
       ...prev,
       [postId]: !prev[postId],
     }));
-  };
+  }
 
-  if (isPending) return <AppSpiner />;
 
   return (
     <div className="w-full justify-between overflow-auto h-full">
+      {
+        isPending && <AppSpiner/>
+      }
       <div className="flex h-full flex-col gap-2">
         <div className="flex flex-grow flex-col gap-2 w-full p-4">
           <div className="w-full flex justify-end">
             {localStorage.getItem("emailId") ===
               (import.meta.env.VITE_ADMIN_EMAILID as string) && (
-              <Button
-                onClick={() => setOpenDialog(true)}
-                className="w-fit"
-              >
+              <Button onClick={() => setOpenDialog(true)} className="w-fit">
                 Post blog
               </Button>
             )}
           </div>
           {(allBlogs?.length === 0 || !allBlogs) && (
             <div className="w-full flex items-center justify-center min-h-[60vh] lg:text-xl text-center">
-              <p>No blogs available at the moment. Please check back later for updates!</p>
+              <p>
+                No blogs available at the moment. Please check back later for
+                updates!
+              </p>
             </div>
           )}
 
           <div className="grid lg:grid-cols-1 gap-5">
-            {allBlogs?.map((post:any, index:number) => {
+            {allBlogs?.map((post: any, index: number) => {
               const wordLimit = 200;
               const words = post.content.split(" ");
               const isExpanded = expandedPosts[post._id] ?? false;
-              const truncatedContent = words.slice(0, wordLimit).join(" ") + "...";
+              const truncatedContent =
+                words.slice(0, wordLimit).join(" ") + "...";
 
               return (
                 <div
@@ -85,7 +90,11 @@ function Blog() {
                   <div className="w-full flex items-center justify-between">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full">
-                        <img className="rounded-full" alt="profile" src={"favicon.png"} />
+                        <img
+                          className="rounded-full"
+                          alt="profile"
+                          src={"favicon.png"}
+                        />
                       </div>
                       <div className="font-semibold">@{"Skillofin"}</div>
                       <div className="text-xs lg:text-sm text-foreground/60">

@@ -1,4 +1,3 @@
-import { useGetMe } from "@/hooks/userHooks";
 import { useEffect, useState } from "react";
 import AppSpiner from "@/utiles/AppSpiner";
 import Dashboard from "./utils/Dashboard";
@@ -11,29 +10,20 @@ import AllJobsOrProjects from "./utils/AllJobsOrProjects";
 import { FaRegBookmark, FaRegFolderOpen } from "react-icons/fa6";
 
 function DashBoardMain() {
-  const { getMe, isPending, data } = useGetMe();
   const [step, setStep] = useState(0);
-
-  useEffect(() => {
-    if (!data?.data) {
-      getMe(undefined);
-    }
-  }, [data]);
-
   const [refresh, setRefresh] = useState(false);
 
   useEffect(() => {
     setRefresh(true);
     setTimeout(() => {
       setRefresh(false);
-    }, 1);
+    }, 10);
   }, [step]);
 
   if (refresh) return <AppSpiner />;
 
   return (
     <div className="w-full flex lg:px-10 flex-col h-full">
-      {isPending && <AppSpiner />}
       <div className="flex gap-3">
         <div className="hidden w-full lg:flex flex-col gap-3 sticky top-0 h-[87vh]">
           <LikedJobsCard seeAllClick={() => setStep(1)} />

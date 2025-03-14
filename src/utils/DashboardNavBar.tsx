@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -10,8 +9,7 @@ import {
 } from "@/components/ui/popover";
 import { RiLogoutCircleLine } from "react-icons/ri";
 import { FaAngleDown } from "react-icons/fa6";
-import { GiReceiveMoney } from "react-icons/gi";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom"; 
 import { useAppContext } from "@/utiles/AppContext";
 import { useLogout } from "@/hooks/userHooks";
 import AppSpiner from "@/utiles/AppSpiner";
@@ -22,9 +20,11 @@ import { FaSignsPost } from "react-icons/fa6";
 import Logo from "./Logo";
 import { TbHeartHandshake } from "react-icons/tb";
 import { FaQuestionCircle } from "react-icons/fa";
+import { GiReceiveMoney } from "react-icons/gi";
 
 function DashboardNavBar() {
   const navigate = useNavigate();
+  const location = useLocation();
   const { userData, userRole } = useAppContext();
 
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -34,6 +34,8 @@ function DashboardNavBar() {
   const [inputValue, setInputValue] = useState<string>("");
   const [popOverOpen, setPopOverOpen] = useState<boolean>(false);
   const [popOverOpen1, setPopOverOpen1] = useState<boolean>(false);
+
+  const isActive = (path: string) => location.pathname === path;
 
   function handleLogoutClick() {
     logout();
@@ -51,14 +53,17 @@ function DashboardNavBar() {
     });
   }
 
+  const activeClass = "text-primary font-semibold border-b border-primary w-fit pb-1 lg:border-b-2";
+
   return (
-    <div className="w-full relative  ">
+    <div className="w-full relative">
       {open && <PostJobDialog onClose={onClose} />}
       {isLoading && <AppSpiner />}
 
-      <div className="hidden md:flex justify-between items-center px-4  py-2">
+      {/* Desktop Navbar */}
+      <div className="hidden md:flex justify-between items-center px-4 py-2">
         <div className="flex items-center gap-8">
-          <div onClick={() => navigate("/feed")} className="cursor-pointer">
+          <div onClick={() => navigate("/feed")} className={`cursor-pointer `}>
             <Logo />
           </div>
           <div className="flex items-center gap-3">
@@ -77,13 +82,17 @@ function DashboardNavBar() {
                           setPopOverOpen1(true);
                         }}
                       >
-                        <div className="flex items-center gap-1">
+                        <div
+                          className={`flex items-center gap-1 ${
+                            isActive("/withdraw") ? activeClass : ""
+                          }`}
+                        >
                           <div className="text-[15px]">Manage finances</div>
                           <FaAngleDown className="w-3 h-3 mt-1" />
                         </div>
                       </PopoverTrigger>
                       <PopoverContent className="p-0 mt-3">
-                        <div className="">
+                        <div>
                           <div
                             onClick={() => {
                               setPopOverOpen1(false);
@@ -91,8 +100,7 @@ function DashboardNavBar() {
                             }}
                             className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
                           >
-                            <GiReceiveMoney className="w-5 h-5 ml-1" />
-                            <p>Withdraw earnings</p>
+                            <span>Withdraw earnings</span>
                           </div>
                         </div>
                       </PopoverContent>
@@ -101,7 +109,9 @@ function DashboardNavBar() {
                 )}
                 <div
                   onClick={() => navigate("/messages")}
-                  className="text-[15px] cursor-pointer"
+                  className={`text-[15px] cursor-pointer ${
+                    isActive("/messages") ? activeClass : ""
+                  }`}
                 >
                   Messages
                 </div>
@@ -109,7 +119,11 @@ function DashboardNavBar() {
                   onClick={() =>
                     navigate(userRole === "CLIENT" ? "/myjobs" : "/jobs")
                   }
-                  className="text-[15px] cursor-pointer"
+                  className={`text-[15px] cursor-pointer ${
+                    isActive(userRole === "CLIENT" ? "/myjobs" : "/jobs")
+                      ? activeClass
+                      : ""
+                  }`}
                 >
                   {userRole === "CLIENT" ? "My Jobs" : "Jobs"}
                 </div>
@@ -117,16 +131,19 @@ function DashboardNavBar() {
             )}
             <div
               onClick={() => navigate("/feed")}
-              className="text-[15px] cursor-pointer ml-2"
+              className={`text-[15px] cursor-pointer ml-2 ${
+                isActive("/feed") ? activeClass : ""
+              }`}
             >
               Feed
             </div>
-
             <div
               onClick={() => navigate("/pricing")}
-              className="text-[15px] cursor-pointer border-2 border-constructive px-2 py-1  rounded-full "
+              className={`text-[15px] cursor-pointer border-2 border-constructive px-2 py-1 rounded-full ${
+                isActive("/pricing") ? activeClass : ""
+              }`}
             >
-              Upgarde
+              Upgrade
             </div>
           </div>
         </div>
@@ -135,11 +152,7 @@ function DashboardNavBar() {
           {userRole !== "BANK" && (
             <div>
               {userRole === "CLIENT" ? (
-                <div
-                  onClick={() => {
-                    setOpen(true);
-                  }}
-                >
+                <div onClick={() => setOpen(true)}>
                   <Button>Post Job</Button>
                 </div>
               ) : (
@@ -218,11 +231,9 @@ function DashboardNavBar() {
                       </p>
                     </div>
                   </div>
-
                   {userRole === "CLIENT" && (
                     <div className="w-full bg-foreground/10 h-[1px]"></div>
                   )}
-
                   {userRole !== "BANK" && (
                     <div className="flex flex-col">
                       {userRole === "CLIENT" && (
@@ -238,7 +249,6 @@ function DashboardNavBar() {
                         </div>
                       )}
                       <div className="w-full bg-foreground/10 h-[1px]"></div>
-
                       <div
                         onClick={() => {
                           navigate("/createpost");
@@ -259,43 +269,40 @@ function DashboardNavBar() {
                         <FaSignsPost className="w-5 h-5 ml-1" />
                         <p>My Posts</p>
                       </div>
-
-                      <div className="w-full bg-foreground/10 h-[1px]"></div>
-                      <div
-                        onClick={() => {
-                          navigate("/contactus");
-                          setPopOverOpen(false);
-                        }}
-                        className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
-                      >
-                        <TbHeartHandshake className="w-5 h-5 ml-1" />
-                        <p>Contact Us</p>
-                      </div>
-                      <div
-                        onClick={() => {
-                          navigate("/faqs");
-                          setPopOverOpen(false);
-                        }}
-                        className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
-                      >
-                        <FaQuestionCircle className="w-5 h-5 ml-1" />
-                        <p>faqs</p>
-                      </div>
-                      <div
-                        onClick={() => {
-                          navigate("/blog");
-                          setPopOverOpen(false);
-                        }}
-                        className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
-                      >
-                        <BsCardList className="w-5 h-5 ml-1" />
-                        <p>Blog</p>
-                      </div>
-
                       <div className="w-full bg-foreground/10 h-[1px]"></div>
                     </div>
                   )}
-
+                  <div
+                    onClick={() => {
+                      navigate("/contactus");
+                      setPopOverOpen(false);
+                    }}
+                    className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
+                  >
+                    <TbHeartHandshake className="w-5 h-5 ml-1" />
+                    <p>Contact Us</p>
+                  </div>
+                  <div
+                    onClick={() => {
+                      navigate("/faqs");
+                      setPopOverOpen(false);
+                    }}
+                    className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
+                  >
+                    <FaQuestionCircle className="w-5 h-5 ml-1" />
+                    <p>FAQs</p>
+                  </div>
+                  <div
+                    onClick={() => {
+                      navigate("/blog");
+                      setPopOverOpen(false);
+                    }}
+                    className="px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
+                  >
+                    <BsCardList className="w-5 h-5 ml-1" />
+                    <p>Blog</p>
+                  </div>
+                  <div className="w-full bg-foreground/10 h-[1px]"></div>
                   <div
                     className="text-destructive mb-1 px-3 cursor-pointer flex gap-3 py-2 lg:hover:bg-foreground/5 items-center"
                     onClick={() => {
@@ -320,7 +327,6 @@ function DashboardNavBar() {
           <div onClick={() => navigate("/feed")} className="cursor-pointer">
             <Logo />
           </div>
-
           <div className="items-center flex gap-3">
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
@@ -335,16 +341,12 @@ function DashboardNavBar() {
           </div>
         </div>
         {mobileMenuOpen && (
-          <div className="bg-white shadow-md px-4 py-4 space-y-4 fixed top-14 w-full h-fit z-[998] ">
+          <div className="bg-white shadow-md px-4 py-4 space-y-4 fixed top-14 w-full h-fit z-[998]">
             {/* Search Bar */}
             {userRole !== "BANK" && (
               <div>
                 {userRole === "CLIENT" ? (
-                  <div
-                    onClick={() => {
-                      setOpen(true);
-                    }}
-                  >
+                  <div onClick={() => setOpen(true)}>
                     <Button>Post Job</Button>
                   </div>
                 ) : (
@@ -366,9 +368,7 @@ function DashboardNavBar() {
                 )}
               </div>
             )}
-            {/* Navigation Links */}
             <div className="flex flex-col space-y-3">
-              {/* Manage Finances with submenu */}
               {userRole !== "BANK" && (
                 <div className="flex flex-col space-y-3">
                   <div>
@@ -403,7 +403,9 @@ function DashboardNavBar() {
                       navigate("/messages");
                       setMobileMenuOpen(false);
                     }}
-                    className="text-[15px] cursor-pointer"
+                    className={`text-[15px] cursor-pointer ${
+                      isActive("/messages") ? activeClass : ""
+                    }`}
                   >
                     Messages
                   </div>
@@ -412,7 +414,11 @@ function DashboardNavBar() {
                       navigate(userRole === "CLIENT" ? "/myjobs" : "/jobs");
                       setMobileMenuOpen(false);
                     }}
-                    className="text-[15px] cursor-pointer"
+                    className={`text-[15px] cursor-pointer ${
+                      isActive(userRole === "CLIENT" ? "/myjobs" : "/jobs")
+                        ? activeClass
+                        : ""
+                    }`}
                   >
                     {userRole === "CLIENT" ? "My Jobs" : "Jobs"}
                   </div>
@@ -421,9 +427,11 @@ function DashboardNavBar() {
                       navigate("/feed");
                       setMobileMenuOpen(false);
                     }}
-                    className="text-[15px] cursor-pointer"
+                    className={`text-[15px] cursor-pointer ${
+                      isActive("/feed") ? activeClass : ""
+                    }`}
                   >
-                    {"Feed"}
+                    Feed
                   </div>
                 </div>
               )}
@@ -432,9 +440,11 @@ function DashboardNavBar() {
                   navigate("/pricing");
                   setMobileMenuOpen(false);
                 }}
-                className="text-[15px] cursor-pointer"
+                className={`text-[15px] cursor-pointer ${
+                  isActive("/pricing") ? activeClass : ""
+                }`}
               >
-                {"Upgarde"}
+                Upgrade
               </div>
             </div>
             {/* Notifications and Profile Section */}
@@ -468,30 +478,25 @@ function DashboardNavBar() {
                     </p>
                   </div>
                 </div>
-
                 {userRole === "CLIENT" && (
                   <div className="w-full bg-foreground/10 h-[1px]"></div>
                 )}
-
                 {userRole === "CLIENT" && (
                   <div
                     onClick={() => navigate("/myjobs")}
                     className="flex items-center gap-2 text-[15px] cursor-pointer"
                   >
                     <BsPersonWorkspace className="w-5 h-5 " />
-                    <p>My jobs</p>
+                    <p>My Jobs</p>
                   </div>
                 )}
-                <div className="w-full bg-foreground/10 h-[1px]"></div>
-
                 <div
                   onClick={() => navigate("/createpost")}
                   className="flex items-center gap-2 text-[15px] cursor-pointer"
                 >
                   <BsPostcardHeart className="w-5 h-5 " />
-                  <p>Create post</p>
+                  <p>Create Post</p>
                 </div>
-
                 <div
                   onClick={() => navigate("/myposts")}
                   className="flex items-center gap-2 text-[15px] cursor-pointer"
@@ -499,7 +504,6 @@ function DashboardNavBar() {
                   <FaSignsPost className="w-5 h-5 " />
                   <p>My Posts</p>
                 </div>
-
                 <div className="w-full bg-foreground/10 h-[1px] mt-3"></div>
                 <div
                   onClick={() => navigate("/contactus")}
@@ -513,7 +517,7 @@ function DashboardNavBar() {
                   className="flex items-center gap-2 text-[15px] cursor-pointer"
                 >
                   <FaQuestionCircle className="w-5 h-5 " />
-                  <p>faqs</p>
+                  <p>FAQs</p>
                 </div>
                 <div
                   onClick={() => navigate("/blog")}
@@ -522,9 +526,7 @@ function DashboardNavBar() {
                   <BsCardList className="w-5 h-5 " />
                   <p>Blog</p>
                 </div>
-
                 <div className="w-full bg-foreground/10 h-[1px] mt-3"></div>
-
                 <div
                   onClick={() => {
                     handleLogoutClick();

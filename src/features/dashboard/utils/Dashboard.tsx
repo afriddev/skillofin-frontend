@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { Button } from "@/components/ui/button";
 import { useCreatePost } from "@/hooks/postHooks";
 import { useAppContext } from "@/utiles/AppContext";
 import AppSpiner from "@/utiles/AppSpiner";
@@ -7,6 +8,7 @@ import { MessageCircle } from "lucide-react";
 import { useEffect, useState } from "react";
 import { FaHeart } from "react-icons/fa6";
 import { MdDelete } from "react-icons/md";
+import { useNavigate } from "react-router-dom";
 
 function Dashboard() {
   const { userData } = useAppContext();
@@ -16,6 +18,7 @@ function Dashboard() {
     undefined | number
   >(undefined);
   const { createPost, isPending } = useCreatePost();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setAllPosts(userData?.allPosts);
@@ -111,6 +114,20 @@ function Dashboard() {
       {isPending && <AppSpiner />}
       <div className="flex flex-row items-center  mt-10 lg:mt-0  gap-10 justify-center">
         <div className="lg:w-fit min-h-[75vh] flex flex-col gap-4">
+          <div className="w-full h-fit border rounded-lg bg-primary text-primary-foreground p-4">
+            <h3 className="text-xl font-bold">Complete your profile</h3>
+            <p className="mt-2">
+              Complete your profile within <strong>24 hours</strong> and get{" "}
+              <strong>5 job free</strong> applications to apply!
+            </p>
+            <Button
+            variant={"secondary"}
+            className="w-fit border-primary border bg-white text-foreground mt-4"
+              onClick={() => navigate("/myprofile")}
+            >
+              Complete Now
+            </Button>
+          </div>
           <div className="grid grid-cols-1 gap-5">
             {allPosts?.map(
               (

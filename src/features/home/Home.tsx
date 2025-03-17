@@ -9,44 +9,9 @@ import { LuUserPlus } from "react-icons/lu";
 import { useNavigate } from "react-router-dom";
 
 function Home() {
-  // const { formState, reset } = useForm();
-  // const { errors } = formState;
-
   const whomRef = useRef(null);
   const contactRef = useRef(null);
   const navigate = useNavigate();
-  // const { sendEmail } = useSendEmail();
-
-  // async function handleContactUs(e: any) {
-  //   sendEmail(
-  //     {
-  //       body: `New message recived from  ${e.fullName} with email - ${e.emailId} and phone - ${e.phone}`,
-  //       subject: "New Message from SkilloFin chat",
-  //       title: "New Message from SkilloFin",
-  //       toEmail: COMPANY_EMAIL,
-  //     },
-  //     {
-  //       onSuccess(data) {
-  //         if (data === "SUCCESS") {
-  //           reset();
-  //         }
-  //       },
-  //     }
-  //   );
-  //   await contactUsAPI({
-  //     emailId: e.emailId,
-  //     fullName: e.fullName,
-  //     phone: e.phone,
-  //   });
-  // }
-
-  // function handleReadMoreClick() {
-  //   (whomRef?.current as any)?.scrollIntoView({ behavior: "smooth" });
-  // }
-
-  // function handleContactUsClick() {
-  //   (contactRef?.current as any)?.scrollIntoView({ behavior: "smooth" });
-  // }
 
   return (
     <div className="w-full h-full flex flex-col relative bg-background text-foreground overflow-x-hidden">
@@ -57,7 +22,7 @@ function Home() {
           className="object-cover w-full h-[320vh] lg:h-[100vh]"
         />
         <svg
-          className="absolute top-20 right-10 hidden lg:flex"
+          className="absolute top-10 right-10 hidden lg:flex"
           width="200"
           height="200"
           xmlns="http://www.w3.org/2000/svg"
@@ -86,13 +51,11 @@ function Home() {
       </div>
 
       <div className="z-[400]  absolute h-full inset-0 items-center w-full flex flex-col ">
-
-
-        <div className="text-foreground items-center flex flex-col w-full px-4 md:flex-row   lg:w-[90vw]    justify-between  pt-[10vw]">
-          <div className="flex flex-col gap-10">
-            <div className="flex flex-col  gap-5 relative">
+        <div className="text-foreground items-center flex flex-col w-full px-4 md:flex-row   lg:w-[90vw]    justify-between mt-10  lg:mt-[5vw]">
+          <div className="flex flex-col gap-5">
+            <div className="flex flex-col gap-4 lg:gap-10 relative">
               <div className="flex items-center">
-                <div className="mt-8">
+                <div>
                   <h1 className="font-bold text-[50px] md:text-[30px] lg:text-[70px] font-serif">
                     SkilloFin
                   </h1>
@@ -123,54 +86,32 @@ function Home() {
                 <p className="text-2xl">( Empowering work ecosystem )</p>
               </div>
             </div>
+            <div className="flex flex-col gap-2 mt-3">
+              <div className="text-2xl font-semibold">
+                SkiLLoFin is offering :{" "}
+              </div>
+              <div className="flex mt-1 flex-col gap-1 lg:text-lg ml-2  ">
+                <li>✅ Freelancers: Lower fees (10% vs. other platforms).</li>
+                <li>✅ AI-powered job matching (no bidding wars).</li>
+                <li>✅ Instant payments. </li>
+                <li>
+                  ✅ Financial services (loans, insurance, and profit-sharing
+                  investments).{" "}
+                </li>
+                <li>
+                  ✅ Real jobs based on proof of work and not just another
+                  resume website.
+                </li>
+                <li>
+                  ✅ Freelancers can invest & earn from Skillofin’s profits.
+                </li>
+                <li>
+                  ✅ Freelancer Payment Protection ($2/month) – Covers up to
+                  $500 in case of disputes.
+                </li>
+              </div>
+            </div>
 
-            {/* <div className="text-lg">
-              <span className="font-semibold text-2xl mr-1">Join now :</span>{" "}
-              Zero commission fees for first 100 freelancers in any category for
-              one year !
-            </div> */}
-            {/* <div className=" hidden lg:flex justify-end -mt-8">
-              <svg
-                width="300"
-                height="8"
-                viewBox="0 0 300 8"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <line
-                  x1="0"
-                  y1="4"
-                  x2="290"
-                  y2="4"
-                  stroke="black"
-                  strokeWidth="2"
-                />
-                <polygon points="290,0 300,4 290,8" fill="black" />
-              </svg>
-            </div> */}
-            {/* <div className="w-fit flex flex-col lg:flex-row  items-center gap-2 lg:gap-10  mt-[5vw]">
-              <Button
-                variant={"outline"}
-                onClick={handleReadMoreClick}
-                className="w-fit py-6 px-10 "
-              >
-                <div className="flex items-center gap-1">
-                  Read More
-                  <div>
-                    <MdExpandMore />
-                  </div>
-                </div>
-              </Button>
-              <Button
-                variant={"outline"}
-                onClick={handleContactUsClick}
-                className="w-fit py-6 px-10 "
-              >
-                <div className="flex   gap-1 items-center">
-                  Contact Us
-                  <MdConnectWithoutContact className="h-10 w-10" />
-                </div>
-              </Button>
-            </div> */}
             <div className="w-fit flex  lg:flex-row  items-center gap-5  lg:gap-10  mt-[2vw]">
               <Button
                 onClick={() => {
@@ -204,50 +145,6 @@ function Home() {
               className="h-[60vh] lg:w-[30vw] lg:mt-[0vw] mt-[10vw] object-cover lg:rounded-tr-[13vw] lg:rounded-bl-[13vw] rounded-sm "
             />
           </div>
-
-          {/* <div className="flex flex-col bg-background rounded-lg mt-10 lg:mt-0">
-            <form
-              className=" lg:w-[30vw] w-[90vw] flex flex-col gap-3 p-8"
-              onSubmit={handleSubmit(handleContactUs)}
-            >
-              <Input
-                mandatory={true}
-                className="h-12"
-                iconName="firstName"
-                placeholder="Full Name"
-                {...register("fullName", {
-                  minLength: 3,
-                  required: "Please enter your full name",
-                })}
-                errorMessage={errors?.fullName?.message}
-              />
-              <Input
-                mandatory={true}
-                className="h-12"
-                placeholder="Phone"
-                iconName="phoneNumber"
-                {...register("phone", {
-                  pattern: /^\+?[1-9]\d{6,14}$/,
-                  required: "Please enter your phone number",
-                })}
-                errorMessage={errors?.phone?.message}
-              />
-              <Input
-                mandatory={true}
-                className="h-12"
-                placeholder="Email Address"
-                iconName="emailId"
-                {...register("emailId", {
-                  pattern: /^\S+@\S+\.\S+$/,
-                  required: "Please enter your email",
-                })}
-                errorMessage={errors?.emailId?.message}
-              />
-              <Button className="py-6" isPending={isPending}>
-                Contact Us
-              </Button>
-            </form>
-          </div> */}
         </div>
 
         <div className=" lg:w-[80vw] flex lg:flex-row lg:h-[70vw] mt-[12vh] lg:mt-[27vh]  ">
